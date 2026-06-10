@@ -27,7 +27,7 @@ app.post("/user",async (req,res)=>{
     });
     if(user)
         return res.json({user: user, message:"User saved successfully"});
-    res.json({user: user, message:"User saved unsuccessfull"});
+    res.json({user: user, message:"User saved unsuccessfull, Please try again!!"});
 });
 
 app.listen(8080);
