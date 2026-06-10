@@ -37,6 +37,8 @@ jobs:
       ##These are the to deploy to vm
       - name: Deploy to the VM
         run: |
+          cat ~/ssh_key
+          wc -l ~/ssh_key
           echo "${{secrets.SSH_PRIVATE_KEY}}" > ~/ssh_key
           chmod 600 /home/runner/ssh_key
           cat /home/runner/ssh_key
