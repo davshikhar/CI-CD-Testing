@@ -1,0 +1,38 @@
+## Build the docker image
+## Push the docker image to docker hub
+## SSH into the VM and start the new image
+
+##CI/CD workflow starts
+name: Deploy the frontend
+on:
+#this tells when do we want our ci/cd workflow to start i.e when the push is made to main/other branch
+  push:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    ##this will clone the codebase on the ubuntu machine
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+        ## the step below is used to log into docker hub on the virtual machine
+      - name: Docker login
+        uses: docker/login-action@v2
+        with:
+        ##these secrets will be stored on github in secrets
+          username: ${{secrets.DOCKERHUB_USERNAME}}
+          password: ${{secrets.DOCKERHUB_TOKEN}}
+
+      ##this action below lets us build and push to docker hub
+      ##and the tag we use will be the sha(hash) of current commit that we made to github
+      ## here in the frontend we will also have to pass build arguments
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./docker/Dockerfile.frontend
+          build-args:
+            - DATABASE_URL=${{secrets.DATABASE_URL}} 
+          push: true
+          tags: shikhar6082/user-frontend:${{github.sha}}
