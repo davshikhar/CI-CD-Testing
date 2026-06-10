@@ -33,3 +33,11 @@ jobs:
           file: ./docker/Dockerfile.backend
           push: true
           tags: shikhar6082/user-backend:${{github.sha}}
+
+      - name: Deploy to the VM
+        run: 
+          echo "${{secrets.SSH_PRIVATE_KEY}}" &> ~/ssh_key
+          mkdir -p /home/runner/.ssh
+          ls /home/runner/.ssh
+          chmod 700 /home/runner/ssh_key
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key root@43.204.214.132 -t "docker pull shikhar6082/user-backend:780cce89d6f6c014f42ae193ea7ba22ff255c7ad && docker stop user-backend && docker run --name user-backend -d -p 8080:8080 shikhar6082/user-backend:${{github.sha}}"
