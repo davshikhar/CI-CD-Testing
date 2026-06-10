@@ -37,9 +37,9 @@ jobs:
       ##These are the to deploy to vm
       - name: Deploy to the VM
         run: |
+          echo "${{secrets.SSH_PRIVATE_KEY}}" > ~/ssh_key
           cat ~/ssh_key
           wc -l ~/ssh_key
-          echo "${{secrets.SSH_PRIVATE_KEY}}" > ~/ssh_key
           chmod 600 /home/runner/ssh_key
           cat /home/runner/ssh_key
           ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@43.204.214.132 -t "docker pull shikhar6082/user-backend:${{github.sha}} && docker stop user-backend && docker run --name user-backend -d -p 8080:8080 shikhar6082/user-backend:${{github.sha}}"
