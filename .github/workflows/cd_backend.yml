@@ -25,11 +25,11 @@ jobs:
           password: ${{secrets.DOCKERHUB_TOKEN}}
 
       ##this action below lets us build and push to docker hub
-      ##and the tag we use will be the sha of commit that we made to github
+      ##and the tag we use will be the sha(hash) of current commit that we made to github
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
           context: .
           file: ./docker/Dockerfile.backend
           push: true
-          tags: shikhar/user-backend:${{github.sha}}
+          tags: shikhar6082/user-backend:${{github.sha}}
